@@ -321,6 +321,597 @@ const handleAddTask = () => {
 
 ---
 
+### 9. **Image** - Display Images
+
+Display images from various sources (local, network, base64).
+
+```tsx
+import { Image, StyleSheet } from 'react-native';
+
+// Local image
+<Image
+  source={require('../assets/images/logo.png')}
+  style={styles.logo}
+/>
+
+// Network image
+<Image
+  source={{ uri: 'https://example.com/image.jpg' }}
+  style={styles.networkImage}
+/>
+
+// With resizeMode
+<Image
+  source={require('../assets/images/background.jpg')}
+  style={styles.background}
+  resizeMode="cover"
+/>
+
+const styles = StyleSheet.create({
+  logo: {
+    width: 100,
+    height: 100,
+  },
+  networkImage: {
+    width: 200,
+    height: 200,
+    borderRadius: 10,
+  },
+  background: {
+    width: '100%',
+    height: 300,
+  },
+});
+```
+
+**Key Properties:**
+
+- `source`: Image source (local or network)
+- `resizeMode`: "cover" | "contain" | "stretch" | "repeat" | "center"
+- `style`: Styling (must include width/height)
+- `onLoad`: Callback when image loads
+- `onError`: Callback on error
+
+**Expo Image Alternative (Recommended):**
+
+```tsx
+import { Image } from "expo-image";
+
+<Image
+  source="https://example.com/image.jpg"
+  style={styles.image}
+  contentFit="cover"
+  transition={1000}
+/>;
+```
+
+---
+
+### 10. **ScrollView** - Scrollable Container
+
+Scrollable container for content larger than the screen.
+
+```tsx
+import { ScrollView, View, Text, StyleSheet } from "react-native";
+
+<ScrollView
+  style={styles.scrollView}
+  showsVerticalScrollIndicator={false}
+  bounces={true}
+>
+  <View style={styles.content}>
+    <Text>Content 1</Text>
+    <Text>Content 2</Text>
+    {/* More content */}
+  </View>
+</ScrollView>;
+
+const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: 20,
+  },
+});
+```
+
+**Key Properties:**
+
+- `horizontal`: Enable horizontal scrolling
+- `showsVerticalScrollIndicator`: Show/hide scroll indicator
+- `showsHorizontalScrollIndicator`: Show/hide horizontal indicator
+- `bounces`: Enable bounce effect (iOS)
+- `scrollEnabled`: Enable/disable scrolling
+- `onScroll`: Scroll event handler
+- `refreshControl`: Pull to refresh
+
+**When to use:**
+
+- Use `ScrollView` for limited content
+- Use `FlatList` for long lists (better performance)
+
+---
+
+### 11. **Button** - Simple Button Component
+
+Basic button component with platform-specific styling.
+
+```tsx
+import { Button, Alert } from 'react-native';
+
+<Button
+  title="Click Me"
+  onPress={() => Alert.alert('Button Pressed')}
+  color="#007AFF"
+/>
+
+<Button
+  title="Disabled Button"
+  onPress={() => {}}
+  disabled={true}
+/>
+```
+
+**Key Properties:**
+
+- `title`: Button text
+- `onPress`: Press handler
+- `color`: Button color
+- `disabled`: Disable button
+
+**Note:** For more customization, use `TouchableOpacity` or `Pressable` with custom styling.
+
+---
+
+### 12. **Switch** - Toggle Switch
+
+Toggle switch component for boolean values.
+
+```tsx
+import { Switch, View, Text, StyleSheet } from "react-native";
+import { useState } from "react";
+
+const [isEnabled, setIsEnabled] = useState(false);
+
+<View style={styles.switchContainer}>
+  <Text>Enable Notifications</Text>
+  <Switch
+    trackColor={{ false: "#767577", true: "#81b0ff" }}
+    thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+    ios_backgroundColor="#3e3e3e"
+    onValueChange={setIsEnabled}
+    value={isEnabled}
+  />
+</View>;
+
+const styles = StyleSheet.create({
+  switchContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 15,
+  },
+});
+```
+
+**Key Properties:**
+
+- `value`: Current value (boolean)
+- `onValueChange`: Callback when toggled
+- `trackColor`: Track color for on/off states
+- `thumbColor`: Thumb color
+- `disabled`: Disable interaction
+
+---
+
+### 13. **ActivityIndicator** - Loading Spinner
+
+Shows a loading spinner/indicator.
+
+```tsx
+import { ActivityIndicator, View, StyleSheet } from 'react-native';
+
+<View style={styles.loadingContainer}>
+  <ActivityIndicator size="large" color="#007AFF" />
+</View>
+
+// Small spinner
+<ActivityIndicator size="small" color="#999" />
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+```
+
+**Key Properties:**
+
+- `size`: "small" | "large" | number
+- `color`: Spinner color
+- `animating`: Show/hide animation
+
+**Loading State Example:**
+
+```tsx
+const [loading, setLoading] = useState(true);
+
+{
+  loading ? (
+    <ActivityIndicator size="large" color="#007AFF" />
+  ) : (
+    <Text>Content loaded!</Text>
+  );
+}
+```
+
+---
+
+### 14. **Modal** - Modal Dialog
+
+Display content in a modal overlay.
+
+```tsx
+import { Modal, View, Text, Button, StyleSheet } from 'react-native';
+import { useState } from 'react';
+
+const [modalVisible, setModalVisible] = useState(false);
+
+<Modal
+  animationType="slide"
+  transparent={true}
+  visible={modalVisible}
+  onRequestClose={() => setModalVisible(false)}
+>
+  <View style={styles.modalOverlay}>
+    <View style={styles.modalContent}>
+      <Text style={styles.modalTitle}>Modal Title</Text>
+      <Text>This is modal content</Text>
+      <Button
+        title="Close"
+        onPress={() => setModalVisible(false)}
+      />
+    </View>
+  </View>
+</Modal>
+
+<Button
+  title="Show Modal"
+  onPress={() => setModalVisible(true)}
+/>
+
+const styles = StyleSheet.create({
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    width: '80%',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+});
+```
+
+**Key Properties:**
+
+- `visible`: Show/hide modal
+- `animationType`: "none" | "slide" | "fade"
+- `transparent`: Transparent background
+- `onRequestClose`: Android back button handler
+
+---
+
+### 15. **Pressable** - Advanced Touch Handler
+
+Modern touchable component with more control than TouchableOpacity.
+
+```tsx
+import { Pressable, Text, StyleSheet } from "react-native";
+
+<Pressable
+  onPress={() => console.log("Pressed")}
+  onLongPress={() => console.log("Long pressed")}
+  style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
+>
+  {({ pressed }) => (
+    <Text style={styles.buttonText}>{pressed ? "Pressed!" : "Press Me"}</Text>
+  )}
+</Pressable>;
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: "#007AFF",
+    padding: 15,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  buttonPressed: {
+    backgroundColor: "#0051A8",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+});
+```
+
+**Key Properties:**
+
+- `onPress`: Press handler
+- `onLongPress`: Long press handler
+- `onPressIn`: Press start handler
+- `onPressOut`: Press end handler
+- `disabled`: Disable interaction
+- `hitSlop`: Increase touchable area
+- `style`: Can be function for dynamic styling
+
+**Press States:**
+
+```tsx
+<Pressable
+  style={({ pressed, hovered, focused }) => [
+    styles.base,
+    pressed && styles.pressed,
+    hovered && styles.hovered,
+  ]}
+>
+```
+
+---
+
+### 16. **Alert** - Native Alert Dialog
+
+Show native alert dialogs (not a component, but commonly used).
+
+```tsx
+import { Alert, Button } from 'react-native';
+
+// Simple alert
+<Button
+  title="Show Alert"
+  onPress={() => Alert.alert('Alert Title', 'Alert message')}
+/>
+
+// Alert with buttons
+<Button
+  title="Confirm Action"
+  onPress={() =>
+    Alert.alert(
+      'Delete Task',
+      'Are you sure you want to delete this task?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () => console.log('Deleted'),
+          style: 'destructive',
+        },
+      ]
+    )
+  }
+/>
+
+// Alert with input (iOS only)
+Alert.prompt(
+  'Enter Name',
+  'What is your name?',
+  (text) => console.log('Name:', text),
+  'plain-text',
+  'Default Name'
+);
+```
+
+**Alert Methods:**
+
+- `Alert.alert()`: Show alert
+- `Alert.prompt()`: Show input prompt (iOS only)
+
+---
+
+### 17. **StatusBar** - System Status Bar
+
+Control the app's status bar appearance.
+
+```tsx
+import { StatusBar } from 'react-native';
+
+// Inside component
+<StatusBar
+  barStyle="dark-content"
+  backgroundColor="#cee7ffff"
+/>
+
+// Light content on dark background
+<StatusBar barStyle="light-content" />
+
+// Hide status bar
+<StatusBar hidden={true} />
+```
+
+**Key Properties:**
+
+- `barStyle`: "default" | "light-content" | "dark-content"
+- `backgroundColor`: Status bar color (Android)
+- `hidden`: Show/hide status bar
+- `translucent`: Translucent status bar (Android)
+
+---
+
+### 18. **RefreshControl** - Pull to Refresh
+
+Add pull-to-refresh functionality to scrollable components.
+
+```tsx
+import {
+  ScrollView,
+  RefreshControl,
+  Text,
+  StyleSheet
+} from 'react-native';
+import { useState } from 'react';
+
+const [refreshing, setRefreshing] = useState(false);
+
+const onRefresh = () => {
+  setRefreshing(true);
+  // Fetch new data
+  setTimeout(() => {
+    setRefreshing(false);
+  }, 2000);
+};
+
+<ScrollView
+  refreshControl={
+    <RefreshControl
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+      colors={['#007AFF']}
+      tintColor="#007AFF"
+    />
+  }
+>
+  <Text>Pull down to refresh</Text>
+</ScrollView>
+
+// With FlatList
+<FlatList
+  data={data}
+  renderItem={renderItem}
+  refreshControl={
+    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+  }
+/>
+```
+
+**Key Properties:**
+
+- `refreshing`: Loading state
+- `onRefresh`: Refresh handler
+- `colors`: Loading colors (Android)
+- `tintColor`: Loading color (iOS)
+
+---
+
+### 19. **SectionList** - Sectioned List
+
+Render list with section headers.
+
+```tsx
+import { SectionList, Text, View, StyleSheet } from "react-native";
+
+const DATA = [
+  {
+    title: "Today",
+    data: ["Task 1", "Task 2"],
+  },
+  {
+    title: "Tomorrow",
+    data: ["Task 3", "Task 4", "Task 5"],
+  },
+];
+
+<SectionList
+  sections={DATA}
+  keyExtractor={(item, index) => item + index}
+  renderItem={({ item }) => (
+    <View style={styles.item}>
+      <Text>{item}</Text>
+    </View>
+  )}
+  renderSectionHeader={({ section: { title } }) => (
+    <View style={styles.header}>
+      <Text style={styles.headerText}>{title}</Text>
+    </View>
+  )}
+/>;
+
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: "#f0f0f0",
+    padding: 10,
+  },
+  headerText: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  item: {
+    padding: 15,
+    backgroundColor: "white",
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+});
+```
+
+**Key Properties:**
+
+- `sections`: Array of section objects
+- `renderItem`: Render each item
+- `renderSectionHeader`: Render section headers
+- `keyExtractor`: Unique key for items
+
+---
+
+### 20. **ImageBackground** - Background Image Container
+
+Use an image as a background for other components.
+
+```tsx
+import { ImageBackground, View, Text, StyleSheet } from "react-native";
+
+<ImageBackground
+  source={require("../assets/images/background.jpg")}
+  style={styles.background}
+  resizeMode="cover"
+>
+  <View style={styles.overlay}>
+    <Text style={styles.text}>Content on top of image</Text>
+  </View>
+</ImageBackground>;
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    width: "100%",
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  text: {
+    color: "white",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+});
+```
+
+**Key Properties:**
+
+- `source`: Image source
+- `resizeMode`: Same as Image component
+- `imageStyle`: Style for the image
+- `style`: Style for the container
+
+---
+
 ## Complete Code Examples
 
 ### Main Screen - `app/index.tsx`
