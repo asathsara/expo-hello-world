@@ -35,7 +35,7 @@ export default function Index() {
     <View style={styles.container}>
       {/* 1. Header Area */}
       <View style={styles.tasksWrapper}>
-        <Text style={styles.sectionTitle}>Today's tasks</Text>
+        <Text style={styles.sectionTitle}>Todays tasks</Text>
 
         <View style={styles.items}>
           {/* This is where the tasks will go! */}
